@@ -1,2 +1,2 @@
-# DataHarvesters2.0
+# DataHarvesters v2.0
 Data Mining Project
