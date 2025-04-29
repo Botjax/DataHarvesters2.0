@@ -1,6 +1,8 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from random_forest import random_forest
+from knn import knn
+from svm import svm
 
 def load_data(file_path):
     data = pd.read_csv(file_path)
@@ -8,8 +10,9 @@ def load_data(file_path):
     y = data['Diagnosis']
     return train_test_split(x, y, test_size=0.2, random_state=42)
 
-def display_metrics(model, metrics):
-    print(f"\n=== {model} Results ===")
+def display_metrics(model, metrics, neighbors=0):
+    if neighbors == 0: print(f"\n=== {model} Results ===")
+    else: print(f"\n=== {model} Results with {neighbors} Neighbors ===")
     print("Accuracy:", metrics["accuracy"])
     print("Confusion Matrix:\n", metrics["confusion_matrix"])
     print("Classification Report:")
@@ -23,3 +26,8 @@ if __name__ == "__main__":
     # j48_metrics = j48(X_train, y_train, X_test, y_test)
     display_metrics("Random Forest", rf_metrics)
     # display_metrics("J-48", j48_metrics)
+    for i in range(1,6):
+        knn_metrics = knn(X_train, y_train, X_test, y_test, neighbors=i)
+        display_metrics("KNN", knn_metrics, neighbors=i)
+    svm_metrics = svm(X_train, y_train, X_test, y_test)
+    display_metrics("SVM", svm_metrics)
