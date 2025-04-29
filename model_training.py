@@ -18,7 +18,7 @@ def display_metrics(model, metrics):
             print(f"{label}: Precision: {scores['precision']:.2f}, Recall: {scores['recall']:.2f}, F1: {scores['f1-score']:.2f}")
 
 if __name__ == "__main__":
-    X_train, X_test, y_train, y_test = load_data("processed_ckd_onehot.csv")
+    X_train, X_test, y_train, y_test = load_data("Resources/processed_data/processed_ckd_onehot.csv")
     rf_metrics = random_forest(X_train, y_train, X_test, y_test)
     # j48_metrics = j48(X_train, y_train, X_test, y_test)
     display_metrics("Random Forest", rf_metrics)
