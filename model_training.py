@@ -5,6 +5,7 @@ from knn import knn
 from svm import svm
 from j48 import j48
 from relief_fs import relief_logistic
+from elm import elm
 
 def load_data(file_path):
     data = pd.read_csv(file_path)
@@ -35,3 +36,5 @@ if __name__ == "__main__":
     display_metrics("SVM", svm_metrics)
     relief_metrics = relief_logistic(X_train, y_train, X_test, y_test, top_k=10)
     display_metrics("Relief Logistic Regression", relief_metrics)
+    elm_metrics = elm(X_train, y_train, X_test, y_test, hidden_neurons=100)
+    display_metrics("ELM", elm_metrics)
