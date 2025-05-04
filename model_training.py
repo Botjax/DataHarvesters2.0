@@ -6,6 +6,7 @@ from svm import svm
 from j48 import j48
 from relief_fs import relief_logistic
 from elm import elm
+from plot_metrics import generate_charts
 
 def load_data(file_path):
     data = pd.read_csv(file_path)
@@ -38,3 +39,18 @@ if __name__ == "__main__":
     display_metrics("Relief Logistic Regression", relief_metrics)
     elm_metrics = elm(X_train, y_train, X_test, y_test, hidden_neurons=100)
     display_metrics("ELM", elm_metrics)
+
+    # collect all metrics for chart generation
+
+    all_metrics = {
+    "Random Forest": rf_metrics,
+    "J-48": j48_metrics,
+    "SVM": svm_metrics,
+    "Relief Logistic Regression": relief_metrics,
+    "ELM": elm_metrics
+    }
+
+    for i in range(1, 6):
+        all_metrics[f"KNN ({i})"] = knn(X_train, y_train, X_test, y_test, neighbors=i)
+
+    generate_charts(all_metrics)
