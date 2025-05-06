@@ -12,7 +12,7 @@ from plot_metrics import generate_charts
 
 def load_data(file_path):
     data = pd.read_csv(file_path)
-    x = data.drop('Diagnosis', axis=1)
+    x = data.drop(['Diagnosis','PatientID'], axis=1)
     y = data['Diagnosis']
     return train_test_split(x, y, test_size=0.2, random_state=42)
 
@@ -27,6 +27,12 @@ def display_metrics(model, metrics, neighbors=0):
     for label, scores in metrics["classification_report"].items():
         if isinstance(scores, dict):
             print(f"{label}: Precision: {scores['precision']:.2f}, Recall: {scores['recall']:.2f}, F1: {scores['f1-score']:.2f}")
+
+    if "feature_importances" in metrics:
+        print("\n=== Top Features ===")
+        top_features = metrics["feature_importances"]
+        print(top_features)
+
 
 if __name__ == "__main__":
     X_train, X_test, y_train, y_test = load_data("Resources/processed_data/processed_ckd_onehot.csv")

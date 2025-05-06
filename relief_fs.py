@@ -1,3 +1,4 @@
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from sklearn.preprocessing import StandardScaler
@@ -55,10 +56,17 @@ def relief_logistic(X_train, y_train, X_test, y_test, top_k=10):
     cm = confusion_matrix(y_test, y_pred)
     report = classification_report(y_test, y_pred, output_dict=True)
 
+    feature_importances = X_train.columns[top_indices]
+    feature_scores = relief_scores[top_indices]
+
     metrics = {
         'accuracy': accuracy,
         'confusion_matrix': cm,
-        'classification_report': report
+        'classification_report': report,
+        'feature_importances': pd.DataFrame({
+            "Feature": feature_importances,
+            "Score": feature_scores
+        })
     }
 
     return metrics

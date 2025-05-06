@@ -11,9 +11,20 @@ def multiSURF(X_train, y_train, X_test, y_test, top_k=10):
     fs = MultiSURF()
     fs.fit(X_train.values, y_train.values)
 
+
+    # Get feature importances from MultiSURF
+    importances = fs.feature_importances_
+
     # Get top K feature indices
-    top_k_indices = fs.feature_importances_.argsort()[::-1][:top_k]
+    top_k_indices = importances.argsort()[::-1][:top_k]
     selected_columns = X_train.columns[top_k_indices]
+
+    print("\n=== Top K Features by MultiSURF Importance ===")
+    feature_scores = importances[top_k_indices]
+    top_features_df = pd.DataFrame({
+        "Feature": selected_columns,
+        "Importance": feature_scores
+    })
 
     # Select top K features
     X_train_selected = X_train[selected_columns]
@@ -27,16 +38,18 @@ def multiSURF(X_train, y_train, X_test, y_test, top_k=10):
     return {
         "accuracy": accuracy_score(y_test, y_pred),
         "confusion_matrix": confusion_matrix(y_test, y_pred),
-        "classification_report": classification_report(y_test, y_pred, output_dict=True)
+        "classification_report": classification_report(y_test, y_pred, output_dict=True),
+        "top_features": selected_columns.tolist(),
+        "feature_importances": top_features_df
     }
 
 if __name__ == "__main__":
     # Load data
     df = pd.read_csv("Resources/processed_data/processed_ckd_onehot.csv")
 
-    # Adjust the column name below to match your actual label column
     target_col = "Diagnosis"
-    X = df.drop(columns=[target_col])
+    id_col = "PatientID"
+    X = df.drop(columns=[target_col, id_col])
     y = df[target_col]
 
     # Train/test split
